@@ -1,0 +1,306 @@
+@import "tailwindcss";
+
+@theme {
+  --color-border: hsl(224 30% 18%);
+  --color-input: hsl(224 30% 18%);
+  --color-ring: hsl(150 84% 37%);
+  --color-background: hsl(224 45% 6%);
+  --color-foreground: hsl(210 20% 98%);
+
+  --color-primary: hsl(150 84% 37%);
+  --color-primary-foreground: hsl(210 20% 98%);
+
+  --color-secondary: hsl(224 30% 15%);
+  --color-secondary-foreground: hsl(210 20% 98%);
+
+  --color-muted: hsl(224 30% 15%);
+  --color-muted-foreground: hsl(217.9 10.6% 64.9%);
+
+  --color-accent: hsl(150 84% 37%);
+  --color-accent-foreground: hsl(210 20% 98%);
+
+  --color-destructive: hsl(0 62.8% 30.6%);
+  --color-destructive-foreground: hsl(210 20% 98%);
+
+  --color-popover: hsl(224 45% 9%);
+  --color-popover-foreground: hsl(210 20% 98%);
+
+  --color-card: hsl(224 45% 9%);
+  --color-card-foreground: hsl(210 20% 98%);
+
+  --radius-lg: 0.75rem;
+  --radius-md: calc(0.75rem - 2px);
+  --radius-sm: calc(0.75rem - 4px);
+}
+
+body {
+  background-color: #f3f4f6;
+  color: #1e293b;
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body {
+  background-color: #0B0F19;
+  color: #F3F4F6;
+}
+
+/* Glassmorphism Styles (Light Mode Default) */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #1e293b;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+  color: #1e293b;
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(16, 185, 129, 0.08);
+}
+
+/* Glassmorphism overrides for Dark Mode */
+.dark .glass-panel {
+  background: rgba(11, 15, 25, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #F3F4F6;
+}
+
+.dark .glass-card {
+  background: rgba(17, 24, 39, 0.6);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  color: #F3F4F6;
+}
+
+.dark .glass-card:hover {
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(16, 185, 129, 0.08);
+}
+
+/* Global Light Mode Utility Overrides */
+html:not(.dark) .bg-\[\#080B11\] {
+  background-color: #f3f4f6 !important;
+}
+
+html:not(.dark) .bg-\[\#0B0F19\] {
+  background-color: #f9fafb !important;
+}
+
+html:not(.dark) .bg-\[\#0a0f18\],
+html:not(.dark) .bg-\[\#0a0f18\]\/60,
+html:not(.dark) .bg-\[\#0a0f18\]\/80 {
+  background-color: #ffffff !important;
+  border-color: rgba(229, 231, 235, 1) !important;
+}
+
+html:not(.dark) .bg-\[\#111827\]\/70 {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(229, 231, 235, 1) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05) !important;
+}
+
+html:not(.dark) .bg-\[\#0e1624\] {
+  background-color: rgba(16, 185, 129, 0.08) !important;
+  color: #047857 !important;
+  border-color: rgba(16, 185, 129, 0.15) !important;
+}
+
+html:not(.dark) .bg-\[\#0c121e\] {
+  background-color: #e5e7eb !important;
+}
+
+html:not(.dark) .bg-\[\#101625\] {
+  background-color: #f3f4f6 !important;
+}
+
+html:not(.dark) .bg-\[\#05080c\] {
+  background-color: #ffffff !important;
+  border-color: #d1d5db !important;
+  color: #1e293b !important;
+}
+
+html:not(.dark) .bg-\[\#131d2f\],
+html:not(.dark) .hover\:bg-\[\#131d2f\]:hover {
+  background-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .bg-\[\#1d0e14\],
+html:not(.dark) .hover\:bg-\[\#1d0e14\]:hover {
+  background-color: #fee2e2 !important;
+}
+
+html:not(.dark) .hover\:bg-\[\#29131d\]:hover {
+  background-color: #fca5a5 !important;
+}
+
+html:not(.dark) .bg-\[\#090D16\] {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+  border-color: #d1d5db !important;
+}
+
+html:not(.dark) .text-white:not(.bg-emerald-600):not(.bg-emerald-500):not(.bg-red-600):not(.bg-red-500):not(.hover\:text-white:hover) {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .text-gray-300 {
+  color: #334155 !important;
+}
+
+html:not(.dark) .text-gray-400 {
+  color: #475569 !important;
+}
+
+html:not(.dark) .text-gray-500 {
+  color: #5b697c !important;
+}
+
+/* Map light-neon accents to readable rich hues in light theme */
+html:not(.dark) .text-emerald-400,
+html:not(.dark) .text-emerald-500 {
+  color: #047857 !important;
+}
+
+html:not(.dark) .text-red-400,
+html:not(.dark) .text-red-500 {
+  color: #b91c1c !important;
+}
+
+/* Ensure text on solid green, red, or active buttons/badges stays white */
+html:not(.dark) .bg-emerald-600,
+html:not(.dark) .bg-emerald-600 *,
+html:not(.dark) .bg-emerald-500,
+html:not(.dark) .bg-emerald-500 *,
+html:not(.dark) .bg-red-600,
+html:not(.dark) .bg-red-600 *,
+html:not(.dark) .bg-red-500,
+html:not(.dark) .bg-red-500 *,
+html:not(.dark) button.text-white,
+html:not(.dark) button .text-white,
+html:not(.dark) a.text-white,
+html:not(.dark) a .text-white {
+  color: #ffffff !important;
+}
+
+html:not(.dark) .border-white\/5 {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html:not(.dark) .border-white\/10 {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+html:not(.dark) input,
+html:not(.dark) select {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+  border-color: #cbd5e1 !important;
+}
+
+html:not(.dark) input::placeholder {
+  color: #94a3b8 !important;
+}
+
+html:not(.dark) td, 
+html:not(.dark) th {
+  border-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Hover utilities overrides for Light Theme */
+html:not(.dark) .hover\:bg-white\/5:hover,
+html:not(.dark) tr.hover\:bg-white\/5:hover {
+  background-color: rgba(16, 185, 129, 0.05) !important;
+}
+
+html:not(.dark) .hover\:text-white:hover {
+  color: #059669 !important;
+}
+
+html:not(.dark) .hover\:text-gray-300:hover {
+  color: #047857 !important;
+}
+
+/* Edit button hover mapping */
+html:not(.dark) .hover\:bg-\[\#131d2f\]:hover {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+html:not(.dark) .hover\:bg-\[\#131d2f\]:hover * {
+  color: #ffffff !important;
+}
+
+/* Delete button layout mapping */
+html:not(.dark) .bg-\[\#1d0e14\] {
+  background-color: rgba(239, 68, 68, 0.08) !important;
+  color: #b91c1c !important;
+  border-color: rgba(239, 68, 68, 0.15) !important;
+}
+
+html:not(.dark) .bg-\[\#1d0e14\] * {
+  color: #b91c1c !important;
+}
+
+html:not(.dark) .hover\:bg-\[\#29131d\]:hover {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+html:not(.dark) .hover\:bg-\[\#29131d\]:hover * {
+  color: #ffffff !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0F19;
+}
+
+html:not(.dark) ::-webkit-scrollbar-track {
+  background: #f1f5f9 !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+html:not(.dark) ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15) !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #10B981;
+}
+
+/* Custom glow animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+  }
+}
+
+.pulse-glow-green {
+  animation: pulse-glow 2s infinite;
+}
