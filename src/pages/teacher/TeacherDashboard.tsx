@@ -6,7 +6,7 @@ import api from '../../api';
 
 interface DashboardStats {
   role: string;
-  academic_year: string;
+  academic_year: string | null;
   assigned_classroom: {
     id: number;
     class_name: string;
@@ -75,6 +75,22 @@ const TeacherDashboard: React.FC = () => {
           <div className="p-4 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-sm">
             {error || 'Dashboard stats are not accessible.'}
           </div>
+        </div>
+      </TeacherLayout>
+    );
+  }
+
+  if (!stats.academic_year) {
+    return (
+      <TeacherLayout>
+        <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center animate-in fade-in duration-500">
+          <div className="w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/20 shadow-lg shadow-emerald-950/50">
+            <Calendar className="w-10 h-10 text-emerald-400" />
+          </div>
+          <h2 className="text-3xl font-extrabold text-white mb-3">Welcome to your Dashboard!</h2>
+          <p className="text-gray-400 max-w-md mx-auto text-sm">
+            The new academic session has not been started yet by the administrator. Please check back later to manage your class.
+          </p>
         </div>
       </TeacherLayout>
     );

@@ -16,7 +16,7 @@ interface ClassroomStatus {
 
 interface DashboardStats {
   role: string;
-  academic_year: string;
+  academic_year: string | null;
   total_students: number;
   total_teachers: number;
   total_classes: number;
@@ -55,7 +55,7 @@ const AdminDashboard: React.FC = () => {
       setStats(response.data);
     } catch (err: any) {
       console.error(err);
-      setError('Failed to fetch dashboard statistics.');
+      setError(err.response?.data?.error || 'Failed to fetch dashboard statistics.');
     } finally {
       setLoading(false);
     }
@@ -78,6 +78,29 @@ const AdminDashboard: React.FC = () => {
           <div className="p-4 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-sm">
             {error || 'No statistics available.'}
           </div>
+        </div>
+      </AdminLayout>
+    );
+  }
+
+  if (!stats.academic_year) {
+    return (
+      <AdminLayout>
+        <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center animate-in fade-in duration-500">
+          <div className="w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/20 shadow-lg shadow-emerald-950/50">
+            <Calendar className="w-10 h-10 text-emerald-400" />
+          </div>
+          <h2 className="text-3xl font-extrabold text-white mb-3">Welcome to the Dashboard!</h2>
+          <p className="text-gray-400 max-w-md mx-auto mb-8 text-sm">
+            Your system is almost ready. To start tracking attendance and managing students, you need to configure your first Academic Year.
+          </p>
+          <Link
+            to="/admin/academic-years"
+            className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold py-3.5 px-8 rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-emerald-950/40"
+          >
+            <Calendar className="w-5 h-5" />
+            Set Up Academic Year
+          </Link>
         </div>
       </AdminLayout>
     );
