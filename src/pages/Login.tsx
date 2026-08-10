@@ -6,7 +6,6 @@ import api from '../api';
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [forgotpassword,setforgotpassword]=useState(false)
   const [showPassword, setShowPassword] = useState(false);
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'light';
@@ -106,83 +105,6 @@ const Login: React.FC = () => {
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-1 flex items-center justify-center relative z-20">
         <div className="w-full max-w-md bg-[#111827]/70 border border-emerald-500/10 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
           
-          {forgotpassword ? (
-            <div className="animate-in fade-in slide-in-from-right-8 duration-500">
-              <div className="mb-6 sm:mb-8">
-                <h3 className="text-lg sm:text-xl font-bold text-white">Reset Password</h3>
-                <p className="text-sm text-gray-400 mt-2">
-                  Enter your username and we'll send instructions to reset your password.
-                </p>
-              </div>
-
-              <form onSubmit={async (e) => {
-                e.preventDefault();
-                setError('');
-                const form = e.target as HTMLFormElement;
-                const usernameInput = form.elements.namedItem('resetUsername') as HTMLInputElement;
-                const resetUser = usernameInput.value;
-                
-                setLoading(true);
-                try {
-                  const response = await api.post('auth/password_reset/', { username: resetUser });
-                  alert(response.data.message || 'Reset link sent.');
-                  setforgotpassword(false);
-                } catch (err: any) {
-                  console.error(err);
-                  setError(err.response?.data?.error || 'Failed to send reset link.');
-                } finally {
-                  setLoading(false);
-                }
-              }} className="space-y-4 sm:space-y-6">
-                {error && (
-                  <div className="mb-4 p-4 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-xs">
-                    {error}
-                  </div>
-                )}
-                <div>
-                  <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-                    Username
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-400" />
-                    <input
-                      name="resetUsername"
-                      type="text"
-                      required
-                      minLength={3}
-                      placeholder="Enter username"
-                      className="w-full bg-[#090D16] border border-white/5 focus:border-emerald-500/50 rounded-xl sm:rounded-2xl pl-10 pr-4 py-3 sm:py-3.5 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 transition-all text-sm font-medium"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-800 text-white font-extrabold rounded-full py-3.5 sm:py-4 mt-2 flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-emerald-950/40 text-sm tracking-wide"
-                >
-                  {loading ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    "Send Reset Link"
-                  )}
-                </button>
-                
-                <div className="text-center mt-4">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setforgotpassword(false);
-                      setError('');
-                    }}
-                    className="text-sm font-medium text-gray-500 hover:text-emerald-400 transition-colors"
-                  >
-                    Back to login
-                  </button>
-                </div>
-              </form>
-            </div>
-          ) : (
             <div className="animate-in fade-in slide-in-from-left-8 duration-500">
               <div className="mb-6 sm:mb-8">
                 <h3 className="text-lg sm:text-xl font-bold text-white">Welcome Back</h3>
@@ -263,15 +185,13 @@ const Login: React.FC = () => {
                   type="button"
                   className="text-sm font-medium text-gray-500 hover:text-emerald-400 transition-colors" 
                   onClick={() => {
-                    setforgotpassword(true);
-                    setError('');
+                    alert("Password reset is temporarily disabled. Please contact your administrator to reset your password.");
                   }}
                 >
                   Forgot your password?
                 </button>
               </div>
             </div>
-          )}
 
         </div>
       </main>
