@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
+import ResetPassword from './pages/ResetPassword';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -23,6 +24,7 @@ const App: React.FC = () => {
       <Routes>
         {/* Auth Route */}
         <Route path="/login" element={<Login />} />
+        <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
 
         {/* Admin Protected Routes */}
         <Route
