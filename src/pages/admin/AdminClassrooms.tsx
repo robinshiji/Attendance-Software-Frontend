@@ -58,9 +58,25 @@ const AdminClassrooms: React.FC = () => {
       return;
     }
 
+    if (!/[a-zA-Z0-9]/.test(className)) {
+      setError('Please enter a valid class name. The class name cannot contain only special characters');
+      return;
+    }
+
+    if (!/[a-zA-Z0-9]/.test(division)) {
+      setError('Please enter a valid division. The division cannot contain only special characters');
+      return;
+    }
+
+    const formatClassName = (name: string) => {
+      return name.trim().split(/\s+/).map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      ).join(' ');
+    };
+
     const payload = {
-      class_name: className.trim(),
-      division: division.trim(),
+      class_name: formatClassName(className),
+      division: division.trim().toUpperCase(),
     };
 
     try {
@@ -86,6 +102,11 @@ const AdminClassrooms: React.FC = () => {
           errorMsg = serverError;
         }
       }
+      
+      if (errorMsg.toLowerCase().includes('unique') || errorMsg.toLowerCase().includes('already exist')) {
+        errorMsg = 'The Entered Class and Division Already Exist';
+      }
+      
       setError(errorMsg);
     }
   };
@@ -151,7 +172,7 @@ const AdminClassrooms: React.FC = () => {
             </h2>
             <form onSubmit={handleSaveClassroom} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-semibold text-gray-800 capitalize tracking-wider mb-2">
                   Class Name
                 </label>
                 <input
@@ -167,7 +188,7 @@ const AdminClassrooms: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-semibold text-gray-800 capitalize tracking-wider mb-2">
                   Division
                 </label>
                 <input

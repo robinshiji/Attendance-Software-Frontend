@@ -123,6 +123,17 @@ const AdminTeachers: React.FC = () => {
     e.preventDefault();
     setError('');
     setMsg('');
+
+    if (!/[a-zA-Z]/.test(firstName)) {
+      setError('Please enter a valid first name. It cannot contain only numbers or special characters.');
+      return;
+    }
+
+    if (!/[a-zA-Z]/.test(lastName)) {
+      setError('Please enter a valid last name. It cannot contain only numbers or special characters.');
+      return;
+    }
+
     setIsSaving(true);
 
     const payload: any = {
@@ -138,6 +149,16 @@ const AdminTeachers: React.FC = () => {
     };
 
     if (password) {
+      const hasUppercase = /[A-Z]/.test(password);
+      const hasLowercase = /[a-z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      const hasSpecial = /[^A-Za-z0-9]/.test(password);
+
+      if (password.length < 8 || !hasUppercase || !hasLowercase || !hasNumber || !hasSpecial) {
+        setError('Password must be at least 8 characters long and contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.');
+        setIsSaving(false);
+        return;
+      }
       payload.password = password;
     } else if (modalMode === 'create') {
       setError('Password is required for new teacher.');
@@ -196,7 +217,7 @@ const AdminTeachers: React.FC = () => {
           </button>
         </div>
 
-        {error && (
+        {!showModal && error && (
           <div className="p-4 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-sm">
             {error}
           </div>
@@ -321,6 +342,12 @@ const AdminTeachers: React.FC = () => {
                 <ShieldAlert className="w-5 h-5 text-emerald-400" />
                 {modalMode === 'create' ? 'Create Teacher Profile' : 'Edit Teacher Profile'}
               </h2>
+
+              {error && (
+                <div className="mb-6 p-4 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-sm">
+                  {error}
+                </div>
+              )}
 
               <form onSubmit={handleSaveTeacher} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

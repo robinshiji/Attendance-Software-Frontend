@@ -205,7 +205,7 @@ const Login: React.FC = () => {
     rel="noopener noreferrer"
     className="hover:text-white transition-colors"
   >
-    <span>Powered By NextGenCoders.tech</span>
+    <span>Powered By NextGenCoderstech</span>
   </a>
       </footer>
 
