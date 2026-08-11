@@ -405,12 +405,11 @@ const AdminTeachers: React.FC = () => {
                       type="text"
                       required
                       minLength={3}
-                      disabled={modalMode === 'edit'}
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       placeholder="e.g. johndoe"
                       autoComplete="off"
-                      className="w-full bg-[#05080c] disabled:opacity-50 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-[#05080c] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500"
                     />
                   </div>
                   <div>
