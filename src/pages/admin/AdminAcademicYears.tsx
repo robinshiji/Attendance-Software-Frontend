@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, Plus, CheckCircle, RefreshCw } from 'lucide-react';
+import { Calendar, Plus, CheckCircle, RefreshCw, Trash2 } from 'lucide-react';
 import AdminLayout from '../../components/AdminLayout';
 import api from '../../api';
 
@@ -39,6 +39,20 @@ const AdminAcademicYears: React.FC = () => {
 
     if (!newYearName.trim()) return;
 
+    const match = newYearName.match(/^(\d{4})-(\d{4})$/);
+    if (!match) {
+      setError('Format must be YYYY-YYYY (e.g., 2026-2027).');
+      return;
+    }
+
+    const startYear = parseInt(match[1]);
+    const endYear = parseInt(match[2]);
+
+    if (endYear !== startYear + 1) {
+      setError(`Invalid academic year. End year must be exactly one year after start year (e.g., ${startYear}-${startYear + 1}).`);
+      return;
+    }
+
     try {
       const response = await api.post('academic-years/', {
         name: newYearName,
@@ -62,6 +76,20 @@ const AdminAcademicYears: React.FC = () => {
       fetchYears();
     } catch (err: any) {
       setError('Failed to update active state.');
+    }
+  };
+
+  const handleDeleteYear = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this academic year? This action cannot be undone.')) return;
+    
+    setError('');
+    setMsg('');
+    try {
+      await api.delete(`academic-years/${id}/`);
+      setMsg('Academic year deleted successfully.');
+      fetchYears();
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Failed to delete academic year.');
     }
   };
 
@@ -147,12 +175,21 @@ const AdminAcademicYears: React.FC = () => {
                           Active Session
                         </span>
                       ) : (
-                        <button
-                          onClick={() => handleToggleActive(y.id)}
-                          className="px-3.5 py-1.5 border border-white/10 hover:border-emerald-500 hover:text-emerald-400 rounded-xl text-xs font-semibold transition-all duration-200"
-                        >
-                          Make Active
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleToggleActive(y.id)}
+                            className="px-3.5 py-1.5 border border-white/10 hover:border-emerald-500 hover:text-emerald-400 rounded-xl text-xs font-semibold transition-all duration-200"
+                          >
+                            Make Active
+                          </button>
+                          <button
+                            onClick={() => handleDeleteYear(y.id)}
+                            className="p-1.5 border border-white/10 hover:border-red-500 hover:bg-red-500/10 text-gray-400 hover:text-red-400 rounded-xl transition-all duration-200"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       )}
                     </div>
                   </div>

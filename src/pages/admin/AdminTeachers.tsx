@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { UserPlus, Edit2, Trash2, X, Check, ShieldAlert } from 'lucide-react';
+import { UserPlus, Edit2, Trash2, X, Check, ShieldAlert, Eye, EyeOff, Search } from 'lucide-react';
 import AdminLayout from '../../components/AdminLayout';
 import api from '../../api';
 
@@ -44,6 +44,7 @@ const AdminTeachers: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [assignedClassroom, setAssignedClassroom] = useState<string>('');
   const [status, setStatus] = useState<'Active' | 'Inactive'>('Active');
+  const [showPassword, setShowPassword] = useState(false);
   
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
@@ -52,18 +53,23 @@ const AdminTeachers: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
+  const [searchQuery, setSearchQuery] = useState('');
+
   useEffect(() => {
     fetchClassrooms();
   }, []);
 
   useEffect(() => {
-    fetchTeachers(currentPage);
-  }, [currentPage]);
+    const timer = setTimeout(() => {
+      fetchTeachers(currentPage, searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [currentPage, searchQuery]);
 
-  const fetchTeachers = async (page: number = 1) => {
+  const fetchTeachers = async (page: number, search: string) => {
     try {
       setLoading(true);
-      const response = await api.get('teachers/', { params: { page } });
+      const response = await api.get('teachers/', { params: { page, search } });
       if (response.data && response.data.results) {
         setTeachers(response.data.results);
         setTotalCount(response.data.count);
@@ -98,6 +104,7 @@ const AdminTeachers: React.FC = () => {
     setPhoneNumber('');
     setAssignedClassroom('');
     setStatus('Active');
+    setShowPassword(false);
     setError('');
     setShowModal(true);
   };
@@ -115,6 +122,7 @@ const AdminTeachers: React.FC = () => {
     setPhoneNumber(initPhone);
     setAssignedClassroom(teacher.profile?.assigned_classroom?.toString() || '');
     setStatus(teacher.profile?.status || 'Active');
+    setShowPassword(false);
     setError('');
     setShowModal(true);
   };
@@ -129,7 +137,7 @@ const AdminTeachers: React.FC = () => {
       return;
     }
 
-    if (!/[a-zA-Z]/.test(lastName)) {
+    if (lastName && !/[a-zA-Z]/.test(lastName)) {
       setError('Please enter a valid last name. It cannot contain only numbers or special characters.');
       return;
     }
@@ -175,7 +183,7 @@ const AdminTeachers: React.FC = () => {
         setMsg('Teacher profile updated successfully!');
       }
       setShowModal(false);
-      fetchTeachers(currentPage);
+      fetchTeachers(currentPage, searchQuery);
     } catch (err: any) {
       console.error(err);
       setError(err.response?.data?.username?.[0] || err.response?.data?.detail || 'Failed to save teacher.');
@@ -192,7 +200,7 @@ const AdminTeachers: React.FC = () => {
     try {
       await api.delete(`teachers/${id}/`);
       setMsg('Teacher profile deleted.');
-      fetchTeachers(currentPage);
+      fetchTeachers(currentPage, searchQuery);
     } catch (err: any) {
       setError('Failed to delete teacher.');
     }
@@ -208,13 +216,28 @@ const AdminTeachers: React.FC = () => {
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Manage Teachers</h1>
             <p className="text-gray-400 text-xs sm:text-sm mt-1">Add instructors and assign classes.</p>
           </div>
-          <button
-            onClick={openCreateModal}
-            className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl px-4 py-3 flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-emerald-950/30 text-sm w-full sm:w-auto"
-          >
-            <UserPlus className="w-4 h-4" />
-            Add Teacher
-          </button>
+          <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-4">
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search teachers..."
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="w-full pl-10 pr-4 py-3 bg-[#05080c] border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+              />
+            </div>
+            <button
+              onClick={openCreateModal}
+              className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl px-4 py-3 flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-emerald-950/30 text-sm w-full sm:w-auto shrink-0"
+            >
+              <UserPlus className="w-4 h-4" />
+              Add Teacher
+            </button>
+          </div>
         </div>
 
         {!showModal && error && (
@@ -349,7 +372,7 @@ const AdminTeachers: React.FC = () => {
                 </div>
               )}
 
-              <form onSubmit={handleSaveTeacher} className="space-y-4">
+              <form onSubmit={handleSaveTeacher} className="space-y-4" autoComplete="off">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">First Name</label>
@@ -367,8 +390,6 @@ const AdminTeachers: React.FC = () => {
                     <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Last Name</label>
                     <input
                       type="text"
-                      required
-                      minLength={2}
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
                       placeholder="e.g. Doe"
@@ -388,20 +409,31 @@ const AdminTeachers: React.FC = () => {
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       placeholder="e.g. johndoe"
+                      autoComplete="off"
                       className="w-full bg-[#05080c] disabled:opacity-50 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500"
                     />
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Password</label>
-                    <input
-                      type="password"
-                      required={modalMode === 'create'}
-                      minLength={modalMode === 'create' || password ? 8 : undefined}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder={modalMode === 'edit' ? 'Leave blank to retain' : '••••••••'}
-                      className="w-full bg-[#05080c] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500"
-                    />
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        required={modalMode === 'create'}
+                        minLength={modalMode === 'create' || password ? 8 : undefined}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder={modalMode === 'edit' ? 'Leave blank to retain' : '••••••••'}
+                        autoComplete="new-password"
+                        className="w-full bg-[#05080c] border border-white/10 rounded-xl px-4 py-2.5 pr-10 text-white text-sm focus:outline-none focus:border-emerald-500"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
                   </div>
                 </div>
 
