@@ -33,6 +33,7 @@ const AdminStudents: React.FC = () => {
   const [search, setSearch] = useState('');
   const [filterClass, setFilterClass] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
+  const [sortOrder, setSortOrder] = useState('');
   const [error, setError] = useState('');
   
   // Pagination state
@@ -68,7 +69,7 @@ const AdminStudents: React.FC = () => {
     setCurrentPage(1); // Reset to page 1 on filter change
     fetchStudents(1);
     setSelectedIds([]); // Clear selection when filters change
-  }, [search, filterClass, filterStatus]);
+  }, [search, filterClass, filterStatus, sortOrder]);
 
   useEffect(() => {
     fetchStudents(currentPage);
@@ -81,6 +82,7 @@ const AdminStudents: React.FC = () => {
       if (search) params.search = search;
       if (filterClass) params.classroom = filterClass;
       if (filterStatus) params.status = filterStatus;
+      if (sortOrder) params.ordering = sortOrder;
 
       const response = await api.get('students/', { params });
       
@@ -258,15 +260,27 @@ const AdminStudents: React.FC = () => {
               </select>
             </div>
 
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="w-1/2 md:w-auto bg-[#0a0f18] border border-white/5 rounded-xl px-3 py-2 text-white text-sm focus:outline-none"
-            >
-              <option value="">All Statuses</option>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select>
+            <div className="flex gap-3 w-full md:w-auto">
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                className="w-full md:w-auto bg-[#0a0f18] border border-white/5 rounded-xl px-3 py-2 text-white text-sm focus:outline-none"
+              >
+                <option value="">Sort By</option>
+                <option value="name_asc">Name (A-Z)</option>
+                <option value="name_desc">Name (Z-A)</option>
+              </select>
+
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="w-1/2 md:w-auto bg-[#0a0f18] border border-white/5 rounded-xl px-3 py-2 text-white text-sm focus:outline-none"
+              >
+                <option value="">All Statuses</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -297,6 +311,7 @@ const AdminStudents: React.FC = () => {
                         }}
                       />
                     </th>
+                    <th className="px-4 pb-3 font-semibold whitespace-nowrap w-16">Sl No</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Student Name</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">House & Bap. Name</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Admission No.</th>
@@ -308,7 +323,7 @@ const AdminStudents: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5 text-sm">
-                  {students.map((student) => (
+                  {students.map((student, index) => (
                     <tr key={student.id} className="hover:bg-white/5 transition-colors">
                       <td className="px-4 py-4">
                         <input 
@@ -323,6 +338,9 @@ const AdminStudents: React.FC = () => {
                             }
                           }}
                         />
+                      </td>
+                      <td className="px-4 py-4 text-gray-400 font-medium">
+                        {(currentPage - 1) * 10 + index + 1}
                       </td>
                       <td className="px-4 py-4 font-semibold text-white whitespace-nowrap">{student.name}</td>
                       <td className="px-4 py-4 whitespace-nowrap">

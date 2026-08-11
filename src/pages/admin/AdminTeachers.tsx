@@ -54,6 +54,7 @@ const AdminTeachers: React.FC = () => {
   const [totalCount, setTotalCount] = useState(0);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortOrder, setSortOrder] = useState('');
 
   useEffect(() => {
     fetchClassrooms();
@@ -61,15 +62,19 @@ const AdminTeachers: React.FC = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      fetchTeachers(currentPage, searchQuery);
+      fetchTeachers(currentPage, searchQuery, sortOrder);
     }, 300);
     return () => clearTimeout(timer);
-  }, [currentPage, searchQuery]);
+  }, [currentPage, searchQuery, sortOrder]);
 
-  const fetchTeachers = async (page: number, search: string) => {
+  const fetchTeachers = async (page: number, search: string, ordering: string) => {
     try {
       setLoading(true);
-      const response = await api.get('teachers/', { params: { page, search } });
+      const params: any = { page };
+      if (search) params.search = search;
+      if (ordering) params.ordering = ordering;
+      
+      const response = await api.get('teachers/', { params });
       if (response.data && response.data.results) {
         setTeachers(response.data.results);
         setTotalCount(response.data.count);
@@ -183,7 +188,7 @@ const AdminTeachers: React.FC = () => {
         setMsg('Teacher profile updated successfully!');
       }
       setShowModal(false);
-      fetchTeachers(currentPage, searchQuery);
+      fetchTeachers(currentPage, searchQuery, sortOrder);
     } catch (err: any) {
       console.error(err);
       setError(err.response?.data?.username?.[0] || err.response?.data?.detail || 'Failed to save teacher.');
@@ -200,7 +205,7 @@ const AdminTeachers: React.FC = () => {
     try {
       await api.delete(`teachers/${id}/`);
       setMsg('Teacher profile deleted.');
-      fetchTeachers(currentPage, searchQuery);
+      fetchTeachers(currentPage, searchQuery, sortOrder);
     } catch (err: any) {
       setError('Failed to delete teacher.');
     }
@@ -230,6 +235,17 @@ const AdminTeachers: React.FC = () => {
                 className="w-full pl-10 pr-4 py-3 bg-[#05080c] border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>
+            
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+              className="bg-[#05080c] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors w-full sm:w-auto"
+            >
+              <option value="">Sort By</option>
+              <option value="name_asc">Name (A-Z)</option>
+              <option value="name_desc">Name (Z-A)</option>
+            </select>
+
             <button
               onClick={openCreateModal}
               className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl px-4 py-3 flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-emerald-950/30 text-sm w-full sm:w-auto shrink-0"
@@ -264,6 +280,7 @@ const AdminTeachers: React.FC = () => {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-white/5 text-xs text-gray-400 uppercase tracking-wider">
+                    <th className="px-4 pb-3 font-semibold whitespace-nowrap w-16">Sl No</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Teacher Name</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Username</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Email & Phone</th>
@@ -273,8 +290,11 @@ const AdminTeachers: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5 text-sm">
-                  {teachers.map((teacher) => (
+                  {teachers.map((teacher, index) => (
                     <tr key={teacher.id} className="hover:bg-white/5 transition-colors">
+                      <td className="px-4 py-4 text-gray-400 font-medium">
+                        {(currentPage - 1) * 10 + index + 1}
+                      </td>
                       <td className="px-4 py-4 font-semibold text-white whitespace-nowrap">
                         {teacher.first_name} {teacher.last_name}
                       </td>
