@@ -157,7 +157,10 @@ const AdminStudents: React.FC = () => {
       if (serverError) {
         if (typeof serverError === 'object') {
           errorMsg = Object.entries(serverError)
-            .map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`)
+            .map(([field, msgs]) => {
+              const formattedField = field === 'non_field_errors' ? '' : field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ': ';
+              return `${formattedField}${Array.isArray(msgs) ? msgs.join(', ') : msgs}`;
+            })
             .join(' | ');
         } else if (typeof serverError === 'string') {
           errorMsg = serverError;
@@ -219,7 +222,7 @@ const AdminStudents: React.FC = () => {
           )}
         </div>
 
-        {error && (
+        {!showModal && error && (
           <div className="p-4 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-sm">
             {error}
           </div>
@@ -443,6 +446,12 @@ const AdminStudents: React.FC = () => {
               <h2 className="text-xl font-bold mb-6 text-white">
                 Edit Student Details
               </h2>
+
+              {error && (
+                <div className="mb-6 p-4 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-sm">
+                  {error}
+                </div>
+              )}
 
               <form onSubmit={handleSaveStudent} className="space-y-4">
                 <div>

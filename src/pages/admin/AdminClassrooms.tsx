@@ -115,7 +115,10 @@ const AdminClassrooms: React.FC = () => {
       if (serverError) {
         if (typeof serverError === 'object') {
           errorMsg = Object.entries(serverError)
-            .map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`)
+            .map(([field, msgs]) => {
+              const formattedField = field === 'non_field_errors' ? '' : field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ': ';
+              return `${formattedField}${Array.isArray(msgs) ? msgs.join(', ') : msgs}`;
+            })
             .join(' | ');
         } else if (typeof serverError === 'string') {
           errorMsg = serverError;

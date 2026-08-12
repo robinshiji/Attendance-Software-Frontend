@@ -171,7 +171,10 @@ const TeacherStudents: React.FC = () => {
       if (serverError) {
         if (typeof serverError === 'object') {
           errorMsg = Object.entries(serverError)
-            .map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`)
+            .map(([field, msgs]) => {
+              const formattedField = field === 'non_field_errors' ? '' : field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ': ';
+              return `${formattedField}${Array.isArray(msgs) ? msgs.join(', ') : msgs}`;
+            })
             .join(' | ');
         } else if (typeof serverError === 'string') {
           errorMsg = serverError;
@@ -280,7 +283,7 @@ const TeacherStudents: React.FC = () => {
           </div>
         </div>
 
-        {error && (
+        {!showModal && !showCsvModal && error && (
           <div className="p-4 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-sm">
             {error}
           </div>
@@ -431,6 +434,12 @@ const TeacherStudents: React.FC = () => {
                 <UploadCloud className="w-5 h-5 text-emerald-400" />
                 Upload Students CSV
               </h2>
+
+              {error && (
+                <div className="mb-4 p-4 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-sm">
+                  {error}
+                </div>
+              )}
               
               <div className="mb-4 text-xs text-gray-400 bg-white/5 p-3 rounded-lg border border-white/10">
                 <p className="font-semibold mb-1 text-gray-300">Expected CSV format:</p>
@@ -491,6 +500,12 @@ const TeacherStudents: React.FC = () => {
               <h2 className="text-xl font-bold mb-6 text-white">
                 {modalMode === 'create' ? 'Add Student Record' : 'Edit Student Details'}
               </h2>
+
+              {error && (
+                <div className="mb-6 p-4 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-sm">
+                  {error}
+                </div>
+              )}
 
               <form onSubmit={handleSaveStudent} className="space-y-4">
                 <div>
