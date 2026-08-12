@@ -293,9 +293,9 @@ const AdminStudents: React.FC = () => {
           ) : students.length === 0 ? (
             <p className="text-gray-500 text-center py-20 text-sm font-medium">No students found matching filters.</p>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-auto max-h-[calc(100vh-360px)] relative">
               <table className="w-full text-left border-collapse">
-                <thead>
+                <thead className="sticky top-0 z-10 bg-[#0a0f18] shadow-sm">
                   <tr className="border-b border-white/5 text-xs text-gray-400 uppercase tracking-wider">
                     <th className="px-4 pb-3 w-10">
                       <input 

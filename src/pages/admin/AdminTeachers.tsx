@@ -276,9 +276,9 @@ const AdminTeachers: React.FC = () => {
           ) : teachers.length === 0 ? (
             <p className="text-gray-500 text-center py-20 text-sm font-medium">No teachers registered yet.</p>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-auto max-h-[calc(100vh-320px)] relative">
               <table className="w-full text-left border-collapse">
-                <thead>
+                <thead className="sticky top-0 z-10 bg-[#0a0f18] shadow-sm">
                   <tr className="border-b border-white/5 text-xs text-gray-400 uppercase tracking-wider">
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap w-16">Sl No</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Teacher Name</th>
