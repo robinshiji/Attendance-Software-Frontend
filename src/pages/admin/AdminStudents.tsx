@@ -61,6 +61,16 @@ const AdminStudents: React.FC = () => {
   // Bulk Delete State
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return '-';
+    const parts = dateString.split('-');
+    if (parts.length === 3) {
+      const [year, month, day] = parts;
+      return `${day}-${month}-${year}`;
+    }
+    return dateString;
+  };
+
   useEffect(() => {
     fetchClassrooms();
   }, []);
@@ -362,7 +372,7 @@ const AdminStudents: React.FC = () => {
                       </td>
                       <td className="px-4 py-4 text-gray-400 whitespace-nowrap">
                         <div className="text-xs text-gray-300">{student.gender || '-'}</div>
-                        <div className="text-[11px] text-gray-500">{student.dob || '-'}</div>
+                        <div className="text-[11px] text-gray-500">{formatDate(student.dob)}</div>
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
                         <div className="text-xs text-gray-300">{student.parent_name || '-'}</div>
