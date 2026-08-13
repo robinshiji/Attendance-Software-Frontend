@@ -67,17 +67,21 @@ const AdminStudents: React.FC = () => {
 
   useEffect(() => {
     setCurrentPage(1); // Reset to page 1 on filter change
-    fetchStudents(1);
+    fetchStudents(1, true);
     setSelectedIds([]); // Clear selection when filters change
   }, [search, filterClass, filterStatus, sortOrder]);
 
   useEffect(() => {
-    fetchStudents(currentPage);
+    fetchStudents(currentPage, true);
+    const intervalId = setInterval(() => {
+      fetchStudents(currentPage, false);
+    }, 15000);
+    return () => clearInterval(intervalId);
   }, [currentPage]);
 
-  const fetchStudents = async (page: number) => {
+  const fetchStudents = async (page: number, showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const params: any = { page };
       if (search) params.search = search;
       if (filterClass) params.classroom = filterClass;
@@ -96,7 +100,7 @@ const AdminStudents: React.FC = () => {
     } catch (err: any) {
       setError('Failed to fetch students.');
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 

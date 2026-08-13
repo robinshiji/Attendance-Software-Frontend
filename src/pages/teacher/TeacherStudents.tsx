@@ -73,13 +73,17 @@ const TeacherStudents: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchStudents();
+    fetchStudents(true);
     setSelectedIds([]); // Clear selection when search changes
+    const intervalId = setInterval(() => {
+      fetchStudents(false);
+    }, 15000);
+    return () => clearInterval(intervalId);
   }, [search]);
 
-  const fetchStudents = async () => {
+  const fetchStudents = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const params: any = { nopaging: 'true' };
       if (search) params.search = search;
       
@@ -88,7 +92,7 @@ const TeacherStudents: React.FC = () => {
     } catch (err: any) {
       setError('Failed to fetch students.');
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 

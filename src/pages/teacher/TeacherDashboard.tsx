@@ -36,12 +36,16 @@ const TeacherDashboard: React.FC = () => {
   const [selectedStudentDetails, setSelectedStudentDetails] = useState<any>(null);
 
   useEffect(() => {
-    fetchStats();
+    fetchStats(true);
+    const intervalId = setInterval(() => {
+      fetchStats(false);
+    }, 15000);
+    return () => clearInterval(intervalId);
   }, []);
 
-  const fetchStats = async () => {
+  const fetchStats = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const [statsRes, reportRes] = await Promise.all([
         api.get('dashboard/'),
         api.get('reports/', { params: { type: 'five_weeks_absent' } })
@@ -54,7 +58,7 @@ const TeacherDashboard: React.FC = () => {
       console.error(err);
       setError('Failed to load dashboard stats.');
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 

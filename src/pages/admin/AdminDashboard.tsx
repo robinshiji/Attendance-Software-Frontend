@@ -45,19 +45,23 @@ const AdminDashboard: React.FC = () => {
   });
 
   useEffect(() => {
-    fetchStats();
+    fetchStats(true);
+    const intervalId = setInterval(() => {
+      fetchStats(false);
+    }, 15000);
+    return () => clearInterval(intervalId);
   }, [selectedDate]);
 
-  const fetchStats = async () => {
+  const fetchStats = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const response = await api.get(`dashboard/?date=${selectedDate}`);
       setStats(response.data);
     } catch (err: any) {
       console.error(err);
       setError(err.response?.data?.error || 'Failed to fetch dashboard statistics.');
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 

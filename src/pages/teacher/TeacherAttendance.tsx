@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Calendar, Search, Check, AlertCircle, Save } from 'lucide-react';
 import TeacherLayout from '../../components/TeacherLayout';
 import api from '../../api';
@@ -21,13 +21,22 @@ const TeacherAttendance: React.FC = () => {
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
 
+  const hasUnsavedChanges = useRef(false);
+
   useEffect(() => {
-    fetchClassData();
+    hasUnsavedChanges.current = false;
+    fetchClassData(true);
+    const interval = setInterval(() => {
+      if (!hasUnsavedChanges.current) {
+        fetchClassData(false);
+      }
+    }, 15000);
+    return () => clearInterval(interval);
   }, [selectedDate]);
 
-  const fetchClassData = async () => {
+  const fetchClassData = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       setError('');
       setMsg('');
 
@@ -57,11 +66,12 @@ const TeacherAttendance: React.FC = () => {
       console.error(err);
       setError('Failed to fetch class registry.');
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 
   const handleToggleStatus = (studentId: number, status: 'Present' | 'Absent') => {
+    hasUnsavedChanges.current = true;
     setAttendance((prev) => ({
       ...prev,
       [studentId]: status,
@@ -84,6 +94,7 @@ const TeacherAttendance: React.FC = () => {
         records,
       });
       setMsg(`Attendance sheet saved successfully for ${selectedDate}.`);
+      hasUnsavedChanges.current = false;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: any) {
       console.error(err);
