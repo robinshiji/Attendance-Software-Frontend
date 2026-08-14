@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Search, Filter, Edit2, Trash2, X, Check } from 'lucide-react';
 import AdminLayout from '../../components/AdminLayout';
 import api from '../../api';
@@ -81,10 +81,15 @@ const AdminStudents: React.FC = () => {
     setSelectedIds([]); // Clear selection when filters change
   }, [search, filterClass, filterStatus, sortOrder]);
 
+  const fetchRef = useRef(fetchStudents);
+  useEffect(() => {
+    fetchRef.current = fetchStudents;
+  }, [fetchStudents]);
+
   useEffect(() => {
     fetchStudents(currentPage, true);
     const intervalId = setInterval(() => {
-      fetchStudents(currentPage, false);
+      fetchRef.current(currentPage, false);
     }, 15000);
     return () => clearInterval(intervalId);
   }, [currentPage]);
@@ -260,8 +265,8 @@ const AdminStudents: React.FC = () => {
             />
           </div>
 
-          <div className="flex gap-3 w-full md:w-auto">
-            <div className="flex items-center gap-2 w-1/2 md:w-auto">
+          <div className="flex flex-wrap gap-3 w-full md:w-auto">
+            <div className="flex items-center gap-2 w-full sm:w-auto md:w-auto">
               <Filter className="w-4 h-4 text-gray-500 hidden md:block" />
               <select
                 value={filterClass}
@@ -277,11 +282,11 @@ const AdminStudents: React.FC = () => {
               </select>
             </div>
 
-            <div className="flex gap-3 w-full md:w-auto">
+            <div className="flex gap-3 w-full sm:w-auto md:w-auto">
               <select
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
-                className="w-full md:w-auto bg-[#0a0f18] border border-white/5 rounded-xl px-3 py-2 text-white text-sm focus:outline-none"
+                className="flex-1 sm:w-auto md:w-auto bg-[#0a0f18] border border-white/5 rounded-xl px-3 py-2 text-white text-sm focus:outline-none"
               >
                 <option value="">Sort By</option>
                 <option value="name_asc">Name (A-Z)</option>
@@ -291,7 +296,7 @@ const AdminStudents: React.FC = () => {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="w-1/2 md:w-auto bg-[#0a0f18] border border-white/5 rounded-xl px-3 py-2 text-white text-sm focus:outline-none"
+                className="flex-1 sm:w-auto md:w-auto bg-[#0a0f18] border border-white/5 rounded-xl px-3 py-2 text-white text-sm focus:outline-none"
               >
                 <option value="">All Statuses</option>
                 <option value="Active">Active</option>
