@@ -81,10 +81,10 @@ const AdminStudents: React.FC = () => {
     setSelectedIds([]); // Clear selection when filters change
   }, [search, filterClass, filterStatus, sortOrder]);
 
-  const fetchRef = useRef(fetchStudents);
+  const fetchRef = useRef<any>(null);
   useEffect(() => {
     fetchRef.current = fetchStudents;
-  }, [fetchStudents]);
+  });
 
   useEffect(() => {
     fetchStudents(currentPage, true);
