@@ -229,6 +229,7 @@ const TeacherAttendance: React.FC = () => {
             </div>
           )}
         </div>
+        </div>
 
       </div>
     </TeacherLayout>
