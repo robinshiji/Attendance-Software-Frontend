@@ -112,10 +112,10 @@ const TeacherAttendance: React.FC = () => {
 
   return (
     <TeacherLayout>
-      <div className="relative">
+      <div className="flex flex-col h-full">
         
-        {/* Header Container (Sticky) */}
-        <div className="sticky top-0 z-20 bg-[#080B11] px-4 sm:px-8 pt-4 sm:pt-8 pb-4 sm:pb-6 space-y-4 sm:space-y-6 border-b border-white/5 shadow-sm">
+        {/* Header Container (Fixed) */}
+        <div className="shrink-0 z-20 bg-[#080B11] px-4 sm:px-8 pt-4 sm:pt-8 pb-4 sm:pb-6 space-y-4 sm:space-y-6 border-b border-white/5 shadow-sm">
           {/* Header content */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
@@ -176,8 +176,10 @@ const TeacherAttendance: React.FC = () => {
         </div>
 
         {/* List Registry */}
-        <div className="p-4 sm:p-8 pt-4 sm:pt-6">
-          <div className="glass-card rounded-2xl p-4 sm:p-6">
+        <div className="p-4 sm:p-8 pt-4 sm:pt-6 flex-1 min-h-0 flex flex-col">
+          <div className="glass-card rounded-2xl p-4 sm:p-6 flex-1 min-h-0 flex flex-col">
+
+          <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
 
           {loading ? (
             <div className="flex items-center justify-center py-20">
@@ -229,7 +231,8 @@ const TeacherAttendance: React.FC = () => {
               })}
             </div>
           )}
-        </div>
+            </div>
+          </div>
         </div>
 
       </div>
