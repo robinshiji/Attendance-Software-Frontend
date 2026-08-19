@@ -157,12 +157,8 @@ const TeacherAttendance: React.FC = () => {
               <span>{msg}</span>
             </div>
           )}
-        </div>
-
-        {/* List Registry */}
-        <div className="p-4 sm:p-8">
-          <div className="glass-card rounded-2xl p-6">
-          <div className="flex justify-between items-center mb-6">
+          {/* Search & Stats Row */}
+          <div className="flex justify-between items-center">
             <div className="relative w-full max-w-md">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <input
@@ -177,6 +173,11 @@ const TeacherAttendance: React.FC = () => {
               Total Active: {filteredStudents.length} Students
             </div>
           </div>
+        </div>
+
+        {/* List Registry */}
+        <div className="p-4 sm:p-8 pt-4 sm:pt-6">
+          <div className="glass-card rounded-2xl p-4 sm:p-6">
 
           {loading ? (
             <div className="flex items-center justify-center py-20">
