@@ -12,7 +12,7 @@ interface Classroom {
 interface Student {
   id: number;
   name: string;
-  admission_number: string | null;
+  student_id_no: string | null;
   classroom: number;
   classroom_detail: Classroom | null;
   gender: string | null;
@@ -46,7 +46,7 @@ const AdminStudents: React.FC = () => {
 
   // Form fields
   const [name, setName] = useState('');
-  const [admissionNumber, setAdmissionNumber] = useState('');
+  const [studentIdNo, setStudentIdNo] = useState('');
   const [classroom, setClassroom] = useState('');
   const [gender, setGender] = useState('');
   const [dob, setDob] = useState('');
@@ -131,7 +131,7 @@ const AdminStudents: React.FC = () => {
   const openEditModal = (student: Student) => {
     setSelectedStudentId(student.id);
     setName(student.name);
-    setAdmissionNumber(student.admission_number || '');
+    setStudentIdNo(student.student_id_no || '');
     setClassroom(student.classroom.toString());
     setGender(student.gender || 'Male');
     setDob(student.dob || '');
@@ -153,7 +153,7 @@ const AdminStudents: React.FC = () => {
 
     const payload = {
       name,
-      admission_number: admissionNumber || null,
+      student_id_no: studentIdNo || null,
       classroom: parseInt(classroom),
       gender: gender || null,
       dob: dob || null,
@@ -260,7 +260,7 @@ const AdminStudents: React.FC = () => {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name or admission no."
+              placeholder="Search by name or student ID no."
               className="w-full bg-[#0a0f18] border border-white/5 rounded-xl pl-10 pr-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 text-sm"
             />
           </div>
@@ -336,7 +336,7 @@ const AdminStudents: React.FC = () => {
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap w-16">Sl No</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Student Name</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">House & Bap. Name</th>
-                    <th className="px-4 pb-3 font-semibold whitespace-nowrap">Admission No.</th>
+                    <th className="px-4 pb-3 font-semibold whitespace-nowrap">Student ID No.</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Classroom</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Details</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Parent Contact</th>
@@ -369,7 +369,7 @@ const AdminStudents: React.FC = () => {
                         <div className="text-xs text-gray-300">{student.house_name || '-'}</div>
                         <div className="text-[11px] text-gray-500">{student.baptism_name || '-'}</div>
                       </td>
-                      <td className="px-4 py-4 text-gray-300 font-mono text-xs whitespace-nowrap">{student.admission_number || '-'}</td>
+                      <td className="px-4 py-4 text-gray-300 font-mono text-xs whitespace-nowrap">{student.student_id_no || '-'}</td>
                       <td className="px-4 py-4 text-gray-300 font-medium whitespace-nowrap">
                         {student.classroom_detail
                           ? `${student.classroom_detail.class_name} - ${student.classroom_detail.division}`
@@ -489,13 +489,12 @@ const AdminStudents: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Admission Number (ID)</label>
+                    <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Student ID No</label>
                     <input
                       type="text"
-                      required
                       maxLength={20}
-                      value={admissionNumber}
-                      onChange={(e) => setAdmissionNumber(e.target.value)}
+                      value={studentIdNo}
+                      onChange={(e) => setStudentIdNo(e.target.value)}
                       placeholder="e.g. ADM1002"
                       className="w-full bg-[#05080c] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500"
                     />

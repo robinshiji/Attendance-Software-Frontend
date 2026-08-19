@@ -120,14 +120,14 @@ const AdminReports: React.FC = () => {
     let csvContent = "data:text/csv;charset=utf-8,";
     
     if (reportData.report_type === 'daily') {
-      csvContent += "Student Name,Admission Number,Class,Parent Name,Parent Phone,Gender,Status,Marked By\n";
+      csvContent += "Student Name,Student ID No,Class,Parent Name,Parent Phone,Gender,Status,Marked By\n";
       reportData.records.forEach((r: any) => {
-        csvContent += `"${r.student_name}","${r.admission_number || ''}","${r.class_name}-${r.division}","${r.parent_name || ''}","${r.parent_phone || ''}","${r.gender || ''}","${r.status}","${r.marked_by}"\n`;
+        csvContent += `"${r.student_name}","${r.student_id_no || ''}","${r.class_name}-${r.division}","${r.parent_name || ''}","${r.parent_phone || ''}","${r.gender || ''}","${r.status}","${r.marked_by}"\n`;
       });
     } else if (reportData.report_type === 'monthly') {
-      csvContent += "Student Name,Admission Number,Classroom,Total Days,Present Days,Absent Days,Attendance Percentage\n";
+      csvContent += "Student Name,Student ID No,Classroom,Total Days,Present Days,Absent Days,Attendance Percentage\n";
       reportData.students_summary.forEach((s: any) => {
-        csvContent += `"${s.student_name}","${s.admission_number || ''}","${s.classroom}","${s.total_days}","${s.present_days}","${s.absent_days}","${s.attendance_percentage}%"\n`;
+        csvContent += `"${s.student_name}","${s.student_id_no || ''}","${s.classroom}","${s.total_days}","${s.present_days}","${s.absent_days}","${s.attendance_percentage}%"\n`;
       });
     } else if (reportData.report_type === 'class') {
       csvContent += "Classroom,Total Students,Total Records,Present Count,Absent Count,Attendance Percentage\n";
@@ -140,9 +140,9 @@ const AdminReports: React.FC = () => {
         csvContent += `"${w.date}","${w.present}","${w.absent}","${w.total}"\n`;
       });
     } else if (reportData.report_type === 'five_weeks_absent') {
-      csvContent += "Student Name,Admission Number,Classroom,Parent Name,Parent Phone,Last Attendance\n";
+      csvContent += "Student Name,Student ID No,Classroom,Parent Name,Parent Phone,Last Attendance\n";
       reportData.students.forEach((s: any) => {
-        csvContent += `"${s.student_name}","${s.admission_number || ''}","${s.classroom}","${s.parent_name || ''}","${s.parent_phone || ''}","${s.last_attendance_date}"\n`;
+        csvContent += `"${s.student_name}","${s.student_id_no || ''}","${s.classroom}","${s.parent_name || ''}","${s.parent_phone || ''}","${s.last_attendance_date}"\n`;
       });
     } else if (reportData.report_type === 'student') {
       csvContent += "Date,Status,Marked By\n";
@@ -227,7 +227,7 @@ const AdminReports: React.FC = () => {
               >
                 {!selectedClass && <option value="">Select Class First</option>}
                 {selectedClass && students.map((s) => (
-                  <option key={s.id} value={s.id}>{s.name} ({s.admission_number || '-'})</option>
+                  <option key={s.id} value={s.id}>{s.name} ({s.student_id_no || '-'})</option>
                 ))}
               </select>
             </div>
@@ -306,7 +306,7 @@ const AdminReports: React.FC = () => {
                       <thead>
                         <tr className="border-b border-white/5 text-xs text-gray-400 uppercase tracking-wider">
                           <th className="px-4 pb-3 font-semibold whitespace-nowrap">Student Name</th>
-                          <th className="px-4 pb-3 font-semibold whitespace-nowrap">Admission No.</th>
+                          <th className="px-4 pb-3 font-semibold whitespace-nowrap">Student ID No.</th>
                           <th className="px-4 pb-3 font-semibold whitespace-nowrap">Classroom</th>
                           <th className="px-4 pb-3 font-semibold whitespace-nowrap">Parent Contact</th>
                           <th className="px-4 pb-3 font-semibold whitespace-nowrap">Status</th>
@@ -322,7 +322,7 @@ const AdminReports: React.FC = () => {
                                 {r.gender && <span className="text-xs text-gray-500 font-normal">({r.gender.charAt(0)})</span>}
                               </div>
                             </td>
-                            <td className="px-4 py-3.5 text-gray-300 font-mono text-xs whitespace-nowrap">{r.admission_number || '-'}</td>
+                            <td className="px-4 py-3.5 text-gray-300 font-mono text-xs whitespace-nowrap">{r.student_id_no || '-'}</td>
                             <td className="px-4 py-3.5 text-gray-400 whitespace-nowrap">{r.class_name} - {r.division}</td>
                             <td className="px-4 py-3.5 whitespace-nowrap">
                               <div className="text-sm text-gray-300">{r.parent_name || '-'}</div>
@@ -386,7 +386,7 @@ const AdminReports: React.FC = () => {
                       <thead>
                         <tr className="border-b border-white/5 text-xs text-gray-400 uppercase tracking-wider">
                           <th className="px-4 pb-3 font-semibold whitespace-nowrap">Student Name</th>
-                          <th className="px-4 pb-3 font-semibold whitespace-nowrap">Admission No.</th>
+                          <th className="px-4 pb-3 font-semibold whitespace-nowrap">Student ID No.</th>
                           <th className="px-4 pb-3 font-semibold whitespace-nowrap">Classroom</th>
                           <th className="px-4 pb-3 font-semibold whitespace-nowrap">Marked Days</th>
                           <th className="px-4 pb-3 font-semibold whitespace-nowrap">Present</th>
@@ -398,7 +398,7 @@ const AdminReports: React.FC = () => {
                         {monthlyPaginated.map((s: any) => (
                           <tr key={s.student_id} className="hover:bg-white/5 transition-colors">
                             <td className="px-4 py-3.5 font-semibold text-white whitespace-nowrap">{s.student_name}</td>
-                            <td className="px-4 py-3.5 text-gray-300 font-mono text-xs whitespace-nowrap">{s.admission_number || '-'}</td>
+                            <td className="px-4 py-3.5 text-gray-300 font-mono text-xs whitespace-nowrap">{s.student_id_no || '-'}</td>
                             <td className="px-4 py-3.5 text-gray-400 whitespace-nowrap">{s.classroom}</td>
                             <td className="px-4 py-3.5 text-gray-300 whitespace-nowrap">{s.total_days} days</td>
                             <td className="px-4 py-3.5 text-emerald-400 font-bold whitespace-nowrap">{s.present_days}</td>
@@ -424,7 +424,7 @@ const AdminReports: React.FC = () => {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                   <div>
                     <h2 className="text-lg font-bold text-white">Student History: {reportData.student_name}</h2>
-                    <p className="text-sm text-gray-400">{reportData.classroom} | Admn: {reportData.admission_number || 'N/A'}</p>
+                    <p className="text-sm text-gray-400">{reportData.classroom} | ID: {reportData.student_id_no || 'N/A'}</p>
                   </div>
                   <div className="flex gap-4">
                     <div className="text-center px-4 py-2 bg-[#0a0f18] rounded-xl border border-white/5">
@@ -498,7 +498,7 @@ const AdminReports: React.FC = () => {
                       <thead>
                         <tr className="border-b border-white/5 text-xs text-gray-400 uppercase tracking-wider">
                           <th className="px-4 pb-3 font-semibold whitespace-nowrap">Student Name</th>
-                          <th className="px-4 pb-3 font-semibold whitespace-nowrap">Admission No.</th>
+                          <th className="px-4 pb-3 font-semibold whitespace-nowrap">Student ID No.</th>
                           <th className="px-4 pb-3 font-semibold whitespace-nowrap">Classroom</th>
                           <th className="px-4 pb-3 font-semibold whitespace-nowrap">Parent Contact</th>
                           <th className="px-4 pb-3 font-semibold whitespace-nowrap">Most Recent Absence</th>
@@ -515,7 +515,7 @@ const AdminReports: React.FC = () => {
                                 {s.student_name}
                               </button>
                             </td>
-                            <td className="px-4 py-4 text-gray-300 font-mono text-xs whitespace-nowrap">{s.admission_number || '-'}</td>
+                            <td className="px-4 py-4 text-gray-300 font-mono text-xs whitespace-nowrap">{s.student_id_no || '-'}</td>
                             <td className="px-4 py-4 text-gray-400 whitespace-nowrap">{s.classroom}</td>
                             <td className="px-4 py-4 whitespace-nowrap">
                               <div className="text-sm text-gray-300">{s.parent_name || '-'}</div>

@@ -8,7 +8,7 @@ interface AttendanceRecord {
   student: number;
   student_detail: {
     name: string;
-    admission_number: string | null;
+    student_id_no: string | null;
   };
   date: string;
   status: 'Present' | 'Absent';
@@ -45,7 +45,7 @@ const TeacherHistory: React.FC = () => {
 
   const filteredHistory = history.filter((rec) =>
     rec.student_detail.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (rec.student_detail.admission_number && rec.student_detail.admission_number.toLowerCase().includes(searchQuery.toLowerCase()))
+    (rec.student_detail.student_id_no && rec.student_detail.student_id_no.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
@@ -107,7 +107,7 @@ const TeacherHistory: React.FC = () => {
                 <thead>
                   <tr className="border-b border-white/5 text-xs text-gray-400 uppercase tracking-wider">
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Student Name</th>
-                    <th className="px-4 pb-3 font-semibold whitespace-nowrap">Admission No.</th>
+                    <th className="px-4 pb-3 font-semibold whitespace-nowrap">Student ID No.</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Status</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Marked By</th>
                     <th className="px-4 pb-3 font-semibold whitespace-nowrap">Date Logged</th>
@@ -117,7 +117,7 @@ const TeacherHistory: React.FC = () => {
                   {filteredHistory.map((rec) => (
                     <tr key={rec.id} className="hover:bg-white/5 transition-colors">
                       <td className="px-4 py-4 font-semibold text-white whitespace-nowrap">{rec.student_detail.name}</td>
-                      <td className="px-4 py-4 text-gray-300 font-mono text-xs whitespace-nowrap">{rec.student_detail.admission_number || '-'}</td>
+                      <td className="px-4 py-4 text-gray-300 font-mono text-xs whitespace-nowrap">{rec.student_detail.student_id_no || '-'}</td>
                       <td className="px-4 py-4 whitespace-nowrap">
                         {rec.status === 'Present' ? (
                           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-950/40 text-emerald-400 border border-emerald-800/30">

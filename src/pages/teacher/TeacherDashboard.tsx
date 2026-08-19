@@ -214,7 +214,7 @@ const TeacherDashboard: React.FC = () => {
                     <thead>
                       <tr className="border-b border-white/5 text-xs text-gray-400 uppercase tracking-wider">
                         <th className="px-4 pb-3 font-semibold whitespace-nowrap">Student Name</th>
-                        <th className="px-4 pb-3 font-semibold whitespace-nowrap">Admission No.</th>
+                        <th className="px-4 pb-3 font-semibold whitespace-nowrap">Student ID No.</th>
                         <th className="px-4 pb-3 font-semibold whitespace-nowrap">Parent Contact</th>
                         <th className="px-4 pb-3 font-semibold whitespace-nowrap">Most Recent Absence</th>
                       </tr>
@@ -230,7 +230,7 @@ const TeacherDashboard: React.FC = () => {
                               {s.student_name}
                             </button>
                           </td>
-                          <td className="px-4 py-4 text-gray-300 font-mono text-xs whitespace-nowrap">{s.admission_number || '-'}</td>
+                          <td className="px-4 py-4 text-gray-300 font-mono text-xs whitespace-nowrap">{s.student_id_no || '-'}</td>
                           <td className="px-4 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-300">{s.parent_name || '-'}</div>
                             <div className="text-xs text-gray-500">{s.parent_phone || '-'}</div>

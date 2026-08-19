@@ -6,7 +6,7 @@ import api from '../../api';
 interface Student {
   id: number;
   name: string;
-  admission_number: string | null;
+  student_id_no: string | null;
   status: string;
 }
 
@@ -106,7 +106,7 @@ const TeacherAttendance: React.FC = () => {
 
   const filteredStudents = students.filter((s) =>
     s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (s.admission_number && s.admission_number.toLowerCase().includes(searchQuery.toLowerCase()))
+    (s.student_id_no && s.student_id_no.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
@@ -190,7 +190,7 @@ const TeacherAttendance: React.FC = () => {
                   >
                     <div>
                       <h3 className="font-bold text-white text-base">{student.name}</h3>
-                      <span className="text-xs text-gray-500 font-mono">Roll/Adm: {student.admission_number || '-'}</span>
+                      <span className="text-xs text-gray-500 font-mono">ID: {student.student_id_no || '-'}</span>
                     </div>
 
                     {/* Single-tap present/absent switch buttons */}
