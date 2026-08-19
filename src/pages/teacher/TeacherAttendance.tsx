@@ -112,52 +112,56 @@ const TeacherAttendance: React.FC = () => {
 
   return (
     <TeacherLayout>
-      <div className="p-4 sm:p-8 space-y-6 sm:space-y-8">
+      <div className="relative">
         
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Mark Attendance</h1>
-            <p className="text-gray-400 text-xs sm:text-sm mt-1">Tap status to toggle attendance for your class.</p>
-          </div>
-          
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <div className="relative w-full sm:w-44">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-400" />
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                className="w-full bg-[#0a0f18] border border-white/5 rounded-xl pl-10 pr-4 py-2.5 text-white text-sm focus:outline-none"
-              />
+        {/* Header Container (Sticky) */}
+        <div className="sticky top-0 z-20 bg-[#080B11]/95 backdrop-blur-xl px-4 sm:px-8 pt-4 sm:pt-8 pb-4 sm:pb-6 space-y-4 sm:space-y-6 border-b border-white/5 shadow-sm">
+          {/* Header content */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Mark Attendance</h1>
+              <p className="text-gray-400 text-xs sm:text-sm mt-1">Tap status to toggle attendance for your class.</p>
             </div>
             
-            <button
-              onClick={handleSave}
-              disabled={saving || students.length === 0}
-              className="bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-800 text-white font-semibold rounded-xl px-5 py-2.5 flex items-center justify-center gap-2 transition-all duration-300 shadow-lg text-sm shrink-0"
-            >
-              <Save className="w-4 h-4" />
-              {saving ? 'Saving...' : 'Save Registry'}
-            </button>
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <div className="relative w-full sm:w-44">
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-400" />
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  className="w-full bg-[#0a0f18] border border-white/5 rounded-xl pl-10 pr-4 py-2.5 text-white text-sm focus:outline-none"
+                />
+              </div>
+              
+              <button
+                onClick={handleSave}
+                disabled={saving || students.length === 0}
+                className="bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-800 text-white font-semibold rounded-xl px-5 py-2.5 flex items-center justify-center gap-2 transition-all duration-300 shadow-lg text-sm shrink-0"
+              >
+                <Save className="w-4 h-4" />
+                {saving ? 'Saving...' : 'Save Registry'}
+              </button>
+            </div>
           </div>
+
+          {error && (
+            <div className="p-4 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-sm flex gap-2 items-center">
+              <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+          {msg && (
+            <div className="p-4 rounded-xl bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 text-sm flex gap-2 items-center">
+              <Check className="w-5 h-5 text-emerald-400 shrink-0" />
+              <span>{msg}</span>
+            </div>
+          )}
         </div>
 
-        {error && (
-          <div className="p-4 rounded-xl bg-red-950/40 border border-red-800/40 text-red-300 text-sm flex gap-2 items-center">
-            <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
-        {msg && (
-          <div className="p-4 rounded-xl bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 text-sm flex gap-2 items-center">
-            <Check className="w-5 h-5 text-emerald-400 shrink-0" />
-            <span>{msg}</span>
-          </div>
-        )}
-
         {/* List Registry */}
-        <div className="glass-card rounded-2xl p-6">
+        <div className="p-4 sm:p-8">
+          <div className="glass-card rounded-2xl p-6">
           <div className="flex justify-between items-center mb-6">
             <div className="relative w-full max-w-md">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
