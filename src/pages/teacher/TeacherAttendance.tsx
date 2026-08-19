@@ -115,7 +115,7 @@ const TeacherAttendance: React.FC = () => {
       <div className="relative">
         
         {/* Header Container (Sticky) */}
-        <div className="sticky top-0 z-20 bg-[#080B11]/95 backdrop-blur-xl px-4 sm:px-8 pt-4 sm:pt-8 pb-4 sm:pb-6 space-y-4 sm:space-y-6 border-b border-white/5 shadow-sm">
+        <div className="sticky top-0 z-20 bg-[#080B11] px-4 sm:px-8 pt-4 sm:pt-8 pb-4 sm:pb-6 space-y-4 sm:space-y-6 border-b border-white/5 shadow-sm">
           {/* Header content */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
