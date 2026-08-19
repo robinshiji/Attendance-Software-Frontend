@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Calendar, School, Users, CheckSquare, AlertCircle, X, Gift } from 'lucide-react';
 import TeacherLayout from '../../components/TeacherLayout';
 import api from '../../api';
+import { formatDate } from '../../utils/formatDate';
 
 interface DashboardStats {
   role: string;
@@ -116,7 +117,7 @@ const TeacherDashboard: React.FC = () => {
           </div>
           <div className="flex items-center gap-2 bg-[#0e1624] border border-white/5 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 self-start sm:self-auto">
             <Calendar className="w-4 h-4 text-emerald-400" />
-            <span>Today: {stats.today_attendance.date}</span>
+            <span>Today: {formatDate(stats.today_attendance.date)}</span>
           </div>
         </div>
 
@@ -235,7 +236,7 @@ const TeacherDashboard: React.FC = () => {
                             <div className="text-sm text-gray-300">{s.parent_name || '-'}</div>
                             <div className="text-xs text-gray-500">{s.parent_phone || '-'}</div>
                           </td>
-                          <td className="px-4 py-4 text-amber-400 font-medium whitespace-nowrap">{s.last_attendance_date}</td>
+                          <td className="px-4 py-4 text-amber-400 font-medium whitespace-nowrap">{formatDate(s.last_attendance_date)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -295,7 +296,7 @@ const TeacherDashboard: React.FC = () => {
                 {selectedStudentDetails.absent_dates?.map((date: string, idx: number) => (
                   <div key={idx} className="bg-red-950/20 border border-red-900/30 text-red-400 p-3 rounded-xl flex items-center gap-3">
                     <Calendar className="w-4 h-4" />
-                    <span className="font-semibold text-sm">{date}</span>
+                    <span className="font-semibold text-sm">{formatDate(date)}</span>
                   </div>
                 ))}
               </div>

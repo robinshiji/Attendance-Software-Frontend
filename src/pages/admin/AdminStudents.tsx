@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Search, Filter, Edit2, Trash2, X, Check } from 'lucide-react';
 import AdminLayout from '../../components/AdminLayout';
 import api from '../../api';
+import { formatDate } from '../../utils/formatDate';
 
 interface Classroom {
   id: number;
@@ -61,15 +62,6 @@ const AdminStudents: React.FC = () => {
   // Bulk Delete State
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return '-';
-    const parts = dateString.split('-');
-    if (parts.length === 3) {
-      const [year, month, day] = parts;
-      return `${day}-${month}-${year}`;
-    }
-    return dateString;
-  };
 
   useEffect(() => {
     fetchClassrooms();

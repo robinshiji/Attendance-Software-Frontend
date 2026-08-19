@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BarChart3, Download, Search, Calendar, X } from 'lucide-react';
 import AdminLayout from '../../components/AdminLayout';
 import api from '../../api';
+import { formatDate } from '../../utils/formatDate';
 
 interface Classroom {
   id: number;
@@ -137,17 +138,17 @@ const AdminReports: React.FC = () => {
     } else if (reportData.report_type === 'weekly') {
       csvContent += "Date,Present Count,Absent Count,Total Count\n";
       reportData.chart_data.forEach((w: any) => {
-        csvContent += `"${w.date}","${w.present}","${w.absent}","${w.total}"\n`;
+        csvContent += `"${formatDate(w.date)}","${w.present}","${w.absent}","${w.total}"\n`;
       });
     } else if (reportData.report_type === 'five_weeks_absent') {
       csvContent += "Student Name,Student ID No,Classroom,Parent Name,Parent Phone,Last Attendance\n";
       reportData.students.forEach((s: any) => {
-        csvContent += `"${s.student_name}","${s.student_id_no || ''}","${s.classroom}","${s.parent_name || ''}","${s.parent_phone || ''}","${s.last_attendance_date}"\n`;
+        csvContent += `"${s.student_name}","${s.student_id_no || ''}","${s.classroom}","${s.parent_name || ''}","${s.parent_phone || ''}","${formatDate(s.last_attendance_date)}"\n`;
       });
     } else if (reportData.report_type === 'student') {
       csvContent += "Date,Status,Marked By\n";
       reportData.history.forEach((r: any) => {
-        csvContent += `"${r.date}","${r.status}","${r.marked_by}"\n`;
+        csvContent += `"${formatDate(r.date)}","${r.status}","${r.marked_by}"\n`;
       });
     }
 
@@ -278,7 +279,7 @@ const AdminReports: React.FC = () => {
             {reportData.report_type === 'daily' && (
               <div className="glass-card rounded-2xl p-6">
                 <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-4 mb-6">
-                  <h2 className="text-lg font-bold text-white">Daily Summary - {reportData.date}</h2>
+                  <h2 className="text-lg font-bold text-white">Daily Summary - {formatDate(reportData.date)}</h2>
                   
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                     <div className="flex bg-[#0a0f18] rounded-lg p-1 border border-white/10">
@@ -359,7 +360,7 @@ const AdminReports: React.FC = () => {
                     const pct = day.total > 0 ? Math.round((day.present / day.total) * 100) : 0;
                     return (
                       <div key={idx} className="bg-[#0a0f18] border border-white/5 rounded-2xl p-4 text-center">
-                        <div className="text-xs text-gray-500 font-bold mb-2">{day.date}</div>
+                        <div className="text-xs text-gray-500 font-bold mb-2">{formatDate(day.date)}</div>
                         <div className="text-xl font-black text-emerald-400 mb-1">{pct}%</div>
                         <div className="text-[10px] text-gray-400">
                           {day.present}P / {day.absent}A
@@ -460,7 +461,7 @@ const AdminReports: React.FC = () => {
                       <tbody className="divide-y divide-white/5 text-sm">
                         {historyPaginated.map((r: any, idx: number) => (
                           <tr key={idx} className="hover:bg-white/5 transition-colors">
-                            <td className="px-4 py-4 font-semibold text-white whitespace-nowrap">{r.date}</td>
+                            <td className="px-4 py-4 font-semibold text-white whitespace-nowrap">{formatDate(r.date)}</td>
                             <td className="px-4 py-4 whitespace-nowrap">
                               <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${
                                 r.status === 'Present' 
@@ -521,7 +522,7 @@ const AdminReports: React.FC = () => {
                               <div className="text-sm text-gray-300">{s.parent_name || '-'}</div>
                               <div className="text-xs text-gray-500">{s.parent_phone || '-'}</div>
                             </td>
-                            <td className="px-4 py-4 text-red-400 font-semibold text-sm whitespace-nowrap">{s.last_attendance_date || '-'}</td>
+                            <td className="px-4 py-4 text-red-400 font-semibold text-sm whitespace-nowrap">{formatDate(s.last_attendance_date)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -558,7 +559,7 @@ const AdminReports: React.FC = () => {
                 {selectedStudentDetails.absent_dates?.map((date: string, idx: number) => (
                   <div key={idx} className="bg-red-950/20 border border-red-900/30 text-red-400 p-3 rounded-xl flex items-center gap-3">
                     <Calendar className="w-4 h-4" />
-                    <span className="font-semibold text-sm">{date}</span>
+                    <span className="font-semibold text-sm">{formatDate(date)}</span>
                   </div>
                 ))}
               </div>

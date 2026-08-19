@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { UserPlus, Edit2, Trash2, X, Check, Search, UploadCloud, Calendar, BarChart3 } from 'lucide-react';
 import TeacherLayout from '../../components/TeacherLayout';
 import api from '../../api';
+import { formatDate } from '../../utils/formatDate';
 
 interface Classroom {
   id: number;
@@ -62,15 +63,6 @@ const TeacherStudents: React.FC = () => {
   // Bulk Delete State
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return '-';
-    const parts = dateString.split('-');
-    if (parts.length === 3) {
-      const [year, month, day] = parts;
-      return `${day}-${month}-${year}`;
-    }
-    return dateString;
-  };
 
   const viewHistory = async (student: Student) => {
     try {
@@ -544,7 +536,7 @@ const TeacherStudents: React.FC = () => {
                       maxLength={20}
                       value={studentIdNo}
                       onChange={(e) => setStudentIdNo(e.target.value)}
-                      placeholder="e.g. ADM1002"
+                      placeholder="e.g. STU001"
                       className="w-full bg-[#05080c] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500"
                     />
                   </div>
@@ -732,7 +724,7 @@ const TeacherStudents: React.FC = () => {
                       <tbody className="divide-y divide-white/5 text-sm">
                         {studentHistory.history.map((r: any, idx: number) => (
                           <tr key={idx} className="hover:bg-white/5 transition-colors">
-                            <td className="px-4 py-4 font-semibold text-white whitespace-nowrap">{r.date}</td>
+                            <td className="px-4 py-4 font-semibold text-white whitespace-nowrap">{formatDate(r.date)}</td>
                             <td className="px-4 py-4 whitespace-nowrap">
                               <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${
                                 r.status === 'Present' 

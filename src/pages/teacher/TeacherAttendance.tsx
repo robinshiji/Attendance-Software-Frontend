@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Calendar, Search, Check, AlertCircle, Save } from 'lucide-react';
 import TeacherLayout from '../../components/TeacherLayout';
 import api from '../../api';
+import { formatDate } from '../../utils/formatDate';
 
 interface Student {
   id: number;
@@ -93,7 +94,7 @@ const TeacherAttendance: React.FC = () => {
         date: selectedDate,
         records,
       });
-      setMsg(`Attendance sheet saved successfully for ${selectedDate}.`);
+      setMsg(`Attendance sheet saved successfully for ${formatDate(selectedDate)}.`);
       hasUnsavedChanges.current = false;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: any) {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Search, Calendar, CheckCircle2, XCircle } from 'lucide-react';
 import TeacherLayout from '../../components/TeacherLayout';
 import api from '../../api';
+import { formatDate } from '../../utils/formatDate';
 
 interface AttendanceRecord {
   id: number;
@@ -132,7 +133,7 @@ const TeacherHistory: React.FC = () => {
                         )}
                       </td>
                       <td className="px-4 py-4 text-gray-500 text-xs whitespace-nowrap">{rec.teacher_name}</td>
-                      <td className="px-4 py-4 text-gray-400 text-xs whitespace-nowrap">{rec.date}</td>
+                      <td className="px-4 py-4 text-gray-400 text-xs whitespace-nowrap">{formatDate(rec.date)}</td>
                     </tr>
                   ))}
                 </tbody>
